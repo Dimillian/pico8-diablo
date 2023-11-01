@@ -1,0 +1,68 @@
+pico-8 cartridge // http://www.pico-8.com
+version 41
+__lua__
+-- entities
+
+entity = {}
+entity.__index = entity
+
+function entity:init(x, y, sprite)
+	local self = setmetatable({}, entity)
+	self.x = x or 0
+	self.y = y or 0
+	self.sprite = sprite or 0
+	return self
+end
+
+function entity:draw()
+	spr(self.sprite, self.x, self.y)
+end
+
+function entity:update()
+end
+
+player = setmetatable({}, {__index = entity})
+player.__index = player
+
+function player:init(x, y)
+	local self = setmetatable(entity:init(x, y, 1), player)
+	self.hp = 100
+	return self
+end
+
+foe = setmetatable({}, {__index = entity})
+foe.__index = foe
+
+function foe:init(x, y)
+	local self = setmetatable(entity:init(x, y, 2), foe)
+	self.atttack = 3
+	return self
+end
+
+function foe:attack(target)
+	if target.health > 0 then
+		target.hp -= self.attack
+	end
+end
+-->8
+-- engine
+
+_player = player:init(64, 64)
+_foe = foe:init(10, 10)
+
+function _draw()
+	cls()
+	_player:draw()
+	_foe:draw()
+end
+
+function _update60()
+
+end
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000100000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
